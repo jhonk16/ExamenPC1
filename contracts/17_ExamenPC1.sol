@@ -38,6 +38,20 @@ contract Biblioteca000244661 {
         return libros.length;
     }
 
+    function inactivarElemento(uint256 _posicion) public ejecutadoPor {
+        require(_posicion < libros.length, "La posicion no existe");
+
+        libros[_posicion].estado = false;
+    }
+
+    function pintarElementosActivos() public ejecutadoPor {
+        for (uint256 i = 0; i < libros.length; i++) {
+            if (libros[i].estado == true) {
+                console.log("Libro activo:", libros[i].id, libros[i].titulo);
+            }
+        }
+    }
+
     function existeId(uint256 _id) private view returns (bool) {
         for (uint256 i = 0; i < libros.length; i++) {
             if (libros[i].id == _id) {
