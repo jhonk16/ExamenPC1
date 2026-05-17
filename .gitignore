@@ -1,0 +1,4 @@
+_deps/
+artifacts/
+.prettierrc.json
+remix.config.json
