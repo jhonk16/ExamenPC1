@@ -10,7 +10,9 @@ contract Biblioteca000244661 {
         bool estado;
     }
 
-    Libro[] public libros;
+    mapping(uint256 => Libro) public libros;
+
+    uint256 public cantidad;
 
     address public dirContrato = 0xd9145CCE52D386f254917e481eB44e9943F39138;
 
@@ -27,38 +29,30 @@ contract Biblioteca000244661 {
         string memory _autor,
         bool _estado
     ) public ejecutadoPor {
-        require(!existeId(_id), "Libro con ese ID ya existe");
+        require(_id > 0, "El ID debe ser mayor a cero");
+        require(libros[_id].id == 0, "Libro con ese ID ya existe");
         require(bytes(_titulo).length > 0, "El titulo no puede estar vacio");
 
-        libros.push(Libro(_id, _titulo, _autor, _estado));
+        libros[_id] = Libro(_id, _titulo, _autor, _estado);
+        cantidad++;
     }
 
     function contarElementos() public ejecutadoPor returns (uint256) {
-        console.log("Cantidad de elementos:", libros.length);
-        return libros.length;
+        console.log("Cantidad de elementos:", cantidad);
+        return cantidad;
     }
 
-    function inactivarElemento(uint256 _posicion) public ejecutadoPor {
-        require(_posicion < libros.length, "La posicion no existe");
+    function inactivarElemento(uint256 _id) public ejecutadoPor {
+        require(libros[_id].id != 0, "El libro no existe");
 
-        libros[_posicion].estado = false;
+        libros[_id].estado = false;
     }
 
     function pintarElementosActivos() public ejecutadoPor {
-        for (uint256 i = 0; i < libros.length; i++) {
+        for (uint256 i = 1; i <= cantidad; i++) {
             if (libros[i].estado == true) {
                 console.log("Libro activo:", libros[i].id, libros[i].titulo);
             }
         }
-    }
-
-    function existeId(uint256 _id) private view returns (bool) {
-        for (uint256 i = 0; i < libros.length; i++) {
-            if (libros[i].id == _id) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
